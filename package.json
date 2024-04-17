@@ -1,0 +1,21 @@
+{
+  "name": "bobs-bagels-pair-programming-abubakar-ben",
+  "version": "1.0.0",
+  "description": "Pair programming exercise",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "cd test-framework & node indexTest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digital-futures-academy-se-2404-a/bobs-bagels-pair-programming-abubakar-ben.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/digital-futures-academy-se-2404-a/bobs-bagels-pair-programming-abubakar-ben/issues"
+  },
+  "homepage": "https://github.com/digital-futures-academy-se-2404-a/bobs-bagels-pair-programming-abubakar-ben#readme"
+}
