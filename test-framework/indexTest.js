@@ -21,5 +21,47 @@ function test1() {
     console.log(`Test passed: ${result}`);
 }
 
+function test2() {
+    //Arrange
+    const basket = new Basket();
+    const itemToRemove = new Item();
+    const expected = null
+
+    let actual, result;
+
+    //Act
+    actual = basket.removeItem(itemToRemove);
+
+    //Assert
+    result = assertEquals(actual, expected);
+
+    //Report
+    console.log(`\n removing item from empty basket`);
+    console.log(`Test passed: ${result}`);
+}
+
+function test3() {
+  //Arrange
+    const basket = new Basket();
+    const item = new Item();
+    basket.addItem(item);
+  const expected = item;
+
+  let actual, result;
+
+  //Act
+  actual = basket.removeItem(item);
+
+  //Assert
+  result = assertEquals(actual, expected);
+
+  //Report
+  console.log(`\n removing item from basket with item in it`);
+  console.log(`Test passed: ${result}`);
+}
+
+
 test1();
+test2();
+test3();
 
