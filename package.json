@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "test": "cd test-framework & node indexTest.js"
+    "start": "node src/index.js",
+    "test": "node spec/specRunner.js"
   },
   "repository": {
     "type": "git",
