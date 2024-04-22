@@ -1,6 +1,6 @@
 import { assertEquals, assertFalse, assertTrue } from "./test-framework/test-framework.js";
 import { Basket } from "../src/basket.js"
-import { Item } from "../src/item.js";
+import Item from "../src/item.js";
 
 
 function printResult(result, actual, expected) {
@@ -8,56 +8,55 @@ function printResult(result, actual, expected) {
   !result && console.log(`Expected: ${expected}, Actual: ${actual}`);
 }
 
-function test1() {
-console.log("\n***********");
+const tests = [];
+
+tests.push(() => {
+  console.log("\n***********");
   console.log("Test 1");
   console.log(`Add item to empty basket`);
 
 
-    //Arrange
-    const basket = new Basket();
-    const itemToAdd = new Item();
+  //Arrange
+  const basket = new Basket();
+  const itemToAdd = new Item();
 
 
-    let actual, result;
+  let actual, result;
 
-    //Act
-    actual = basket.addItem(itemToAdd);
+  //Act
+  actual = basket.addItem(itemToAdd);
 
-    //Assert
-    result = assertTrue(actual);
+  //Assert
+  result = assertTrue(actual);
 
-    //Report
+  //Report
 
-  printResult(result,actual,true);
-}
+  printResult(result, actual, true);
+});
 
-
-
-function test2() {
-
+tests.push(() => {
   console.log("\n***********");
   console.log("Test 2");
   console.log(`Adding item to basket and testing to see length change`);
 
   //Arrange
-    const basket = new Basket();
-    const item = new Item();
-    const expected = basket.items.length + 1;
-    let actual, result;
+  const basket = new Basket();
+  const item = new Item();
+  const expected = basket.getItemsLength() + 1;
+  let actual, result;
 
   //Act
   basket.addItem(item);
-  actual = basket.items.length
+  actual = basket.getItemsLength();
 
   //Assert
   result = assertEquals(actual, expected);
 
   //Report
   printResult(result, actual, expected);
-}
+})
 
-function test3() {
+tests.push(() => {
   console.log("\n***********");
   console.log("Test 3");
   console.log(`Check item added to basket is in basket`);
@@ -69,16 +68,16 @@ function test3() {
 
   //Act
   basket.addItem(item);
-  actual = basket.items.includes(item);
+  actual = basket.hasItem(item);
 
   //Assert
   result = assertTrue(actual);
 
   //Report
   printResult(result, actual, true);
-}
+});
 
-function test4() {
+tests.push(() => {
   console.log("\n***********");
   console.log("Test 4");
   console.log(`Check multiples item added to basket is in basket`);
@@ -92,18 +91,18 @@ function test4() {
   //Act
   basket.addItem(item);
   basket.addItem(item1);
-  const allItems = [item, item1]
-  const checkItems = (currentItem) => basket.items.includes(currentItem) 
-  actual = allItems.every(checkItems)
+  const allItems = [item, item1];
+  const checkItems = (currentItem) => basket.hasItem(currentItem);
+  actual = allItems.every(checkItems);
 
   //Assert
   result = assertTrue(actual);
 
   //Report
   printResult(result, actual, true);
-}
+})
 
-function test5() {
+tests.push(() => {
   console.log("\n***********");
   console.log("Test 5");
   console.log(`Removing item from empty basket`);
@@ -122,9 +121,9 @@ function test5() {
   result = assertEquals(actual, expected);
 
   printResult(result, actual, expected);
-}
+})
 
-function test6() {
+tests.push(() => {
   console.log("\n***********");
   console.log("Test 6");
   console.log(`Removing item from basket with item in it`);
@@ -144,9 +143,9 @@ function test6() {
 
   //Report
   printResult(result, actual, expected);
-}
+})
 
-function testBasketIsFullWhenBasketIsFull() {
+tests.push(() => {
   console.log("\n***********");
   console.log("testBasketIsFullWhenBasketIsFull");
   console.log(`Test that basket is full returns true when capacity is reached`);
@@ -160,11 +159,10 @@ function testBasketIsFullWhenBasketIsFull() {
     new Item(),
     new Item(),
   ];
-  for (const item of items) { 
-      basket.addItem(item);
+  for (const item of items) {
+    basket.addItem(item);
   }
 
-  
   const expected = true;
 
   let actual, result;
@@ -177,27 +175,22 @@ function testBasketIsFullWhenBasketIsFull() {
 
   //Report
   printResult(result, actual, expected);
-}
+})
 
 
-function testBasketIsFullWhenBasketIsNotFull() {
+tests.push(() => {
   console.log("\n***********");
   console.log("testBasketIsFullWhenBasketIsFull");
-  console.log(`Test that basket is not full returns false when capacity is not reached`);
+  console.log(
+    `Test that basket is not full returns false when capacity is not reached`
+  );
   //Arrange
   const basket = new Basket();
-  const items = [
-    new Item(),
-    new Item(),
-    new Item(),
-    new Item(),
-    
-  ];
-  for (const item of items) { 
-      basket.addItem(item);
+  const items = [new Item(), new Item(), new Item(), new Item()];
+  for (const item of items) {
+    basket.addItem(item);
   }
 
-  
   const expected = false;
 
   let actual, result;
@@ -210,14 +203,12 @@ function testBasketIsFullWhenBasketIsNotFull() {
 
   //Report
   printResult(result, actual, expected);
-}
+})
 
-function testBasketIsFullWhenBasketIsEmpty() {
+tests.push(() => {
   console.log("\n***********");
   console.log("testBasketIsFullWhenBasketIsEmpty");
-  console.log(
-    `Test that basket is not full returns true when basket is empty`
-  );
+  console.log(`Test that basket is not full returns true when basket is empty`);
   //Arrange
   const basket = new Basket();
 
@@ -231,75 +222,98 @@ function testBasketIsFullWhenBasketIsEmpty() {
 
   //Report
   printResult(result, actual, false);
-}
+})
 
-function testBasketIsFullWhenBasketLengthEqualToCapacity() {
+tests.push(() => {
+   console.log("\n***********");
+   console.log("testBasketIsFullWhenBasketLengthEqualToCapacity");
+   console.log(
+     `Test that basket is full returns true when item count is equal to max capacity`
+   );
+   //Arrange
+   const basket = new Basket();
+   const items = [new Item(), new Item(), new Item(), new Item(), new Item()];
+   for (const item of items) {
+     basket.addItem(item);
+   }
+
+   const expected = true;
+
+   let actual, result;
+
+   //Act
+   actual = basket.isFull();
+
+   //Assert
+   result = assertTrue(actual);
+
+   //Report
+   printResult(result, actual, expected);
+})
+
+tests.push(() => {
+   console.log("\n***********");
+   console.log("testAddItemWhenBasketIsFull");
+   console.log(`Test that add item is not allowed when the basket is full`);
+   //Arrange
+   const basket = new Basket();
+   const items = [
+     new Item(),
+     new Item(),
+     new Item(),
+     new Item(),
+     new Item(),
+     new Item(),
+     new Item(),
+   ];
+   for (const item of items) {
+     basket.addItem(item);
+   }
+
+   const expected = false;
+
+   let actual, result;
+
+   //Act
+   actual = basket.addItem(new Item());
+
+   //Assert
+   result = assertFalse(actual);
+
+   //Report
+   printResult(result, actual, expected);
+})
+
+tests.push(() => {
   console.log("\n***********");
-  console.log("testBasketIsFullWhenBasketLengthEqualToCapacity");
-  console.log(
-    `Test that basket is full returns true when item count is equal to max capacity`
-  );
+  console.log("call addItem with a value not of type Item");
+
   //Arrange
   const basket = new Basket();
-  const items = [new Item(), new Item(), new Item(), new Item(), new Item()];
-  for (const item of items) {
-    basket.addItem(item);
-  }
-
-  const expected = true;
-
-  let actual, result;
-
-  //Act
-  actual = basket.isFull();
-
-  //Assert
-  result = assertTrue(actual);
-
-  //Report
-  printResult(result, actual, expected);
-}
-
-
-function testAddItemWhenBasketIsFull() {
-  console.log("\n***********");
-  console.log("testAddItemWhenBasketIsFull");
-  console.log(
-    `Test that add item is not allowed when the basket is full`
-  );
-  //Arrange
-  const basket = new Basket();
-  const items = [new Item(), new Item(), new Item(), new Item(), new Item(), new Item(), new Item() ];
-  for (const item of items) {
-    basket.addItem(item);
-  }
-
   const expected = false;
+  const invalidArgument = null
 
   let actual, result;
 
   //Act
-  actual = basket.addItem(new Item())
- 
-
+  basket.addItem(invalidArgument);
+ actual = basket.hasItem(invalidArgument);
   //Assert
   result = assertFalse(actual);
 
   //Report
   printResult(result, actual, expected);
+});
+
+tests.push(() => {
+  
+})
+
+for (const test of tests) {
+  test();
 }
 
-test1();
-test2();
-test3();
-test4();
-test5();
-test6();
-testBasketIsFullWhenBasketIsFull();
-testBasketIsFullWhenBasketIsNotFull();
-testBasketIsFullWhenBasketIsEmpty();
-testBasketIsFullWhenBasketLengthEqualToCapacity();
-testAddItemWhenBasketIsFull();
+
 
 
 
